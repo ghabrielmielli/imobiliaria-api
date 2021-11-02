@@ -1,6 +1,6 @@
 require("dotenv").config();
-const sequelize = require("./model/db");
-
+const db = require("./model/db");
+/* 
 async function run() {
 	try {
 		await sequelize.authenticate();
@@ -11,3 +11,16 @@ async function run() {
 }
 
 run();
+ */
+
+const Usuario = require("./model/Usuario");
+const Imovel = require("./model/Imovel");
+const Endereco = require("./model/Contrato");
+const Contrato = require("./model/Contrato");
+db.sync()
+	.then(() => {
+		console.log("BD sincronizado com sucesso!");
+	})
+	.catch((e) => {
+		console.error("ERRO AO SINCRONIZAR COM O BD: \n" + e);
+	});
