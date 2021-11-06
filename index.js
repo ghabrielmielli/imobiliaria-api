@@ -13,9 +13,9 @@ async function run() {
 run();
  */
 
-const Usuario = require("./model/Usuario");
+const Usuario = require("./model/Cliente");
+const Endereco = require("./model/Endereco");
 const Imovel = require("./model/Imovel");
-const Endereco = require("./model/Contrato");
 const Contrato = require("./model/Contrato");
 
 (async () => {
@@ -33,10 +33,14 @@ const cors = require("cors");
 const app = express();
 
 app.use(cors());
+app.use(express.json());
 
 //clientes router
 const clientesRoutes = require("./routes/clientes");
+const imoveisRoutes = require("./routes/imoveis");
+
 app.use("/clientes", clientesRoutes);
+app.use("/imoveis", imoveisRoutes);
 
 //Server start
 app.listen("3000", (err) => {

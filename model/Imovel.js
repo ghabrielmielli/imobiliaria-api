@@ -1,5 +1,7 @@
 const Sequelize = require("sequelize");
+const Cliente = require("./Cliente");
 const db = require("./db");
+const Endereco = require("./Endereco");
 
 const Imovel = db.define(
 	"imovel",
@@ -17,7 +19,7 @@ const Imovel = db.define(
 		endereco: {
 			type: Sequelize.INTEGER,
 			references: {
-				model: "endereco",
+				model: Endereco,
 
 				key: "id",
 			},
@@ -27,7 +29,7 @@ const Imovel = db.define(
 			type: Sequelize.INTEGER,
 			allowNull: false,
 			references: {
-				model: "usuario",
+				model: Cliente,
 
 				key: "id",
 			},

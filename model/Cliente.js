@@ -1,8 +1,8 @@
 const Sequelize = require("sequelize");
 const db = require("./db");
 
-const Usuario = db.define(
-	"usuario",
+const Cliente = db.define(
+	"cliente",
 	{
 		id: {
 			type: Sequelize.INTEGER,
@@ -16,6 +16,7 @@ const Usuario = db.define(
 		cpf: {
 			type: Sequelize.STRING,
 			allowNull: false,
+			unique: true,
 		},
 		tipo: {
 			type: Sequelize.STRING,
@@ -27,4 +28,4 @@ const Usuario = db.define(
 	}
 );
 
-module.exports = Usuario;
+module.exports = Cliente;

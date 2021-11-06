@@ -1,5 +1,7 @@
 const Sequelize = require("sequelize");
+const Cliente = require("./Cliente");
 const db = require("./db");
+const Imovel = require("./Imovel");
 
 const Contrato = db.define(
 	"contrato",
@@ -14,7 +16,7 @@ const Contrato = db.define(
 			type: Sequelize.INTEGER,
 			allowNull: false,
 			references: {
-				model: "usuario",
+				model: Cliente,
 
 				key: "id",
 			},
@@ -23,7 +25,7 @@ const Contrato = db.define(
 			type: Sequelize.INTEGER,
 			allowNull: false,
 			references: {
-				model: "imovel",
+				model: Imovel,
 
 				key: "id",
 			},
