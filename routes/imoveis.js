@@ -17,8 +17,8 @@ router.route("/")
 		Imovel.findAll({
 			attributes: ["id", "descricao"],
 			include: [
-				{ model: Endereco, required: true, attributes: ["cidade"] },
-				{ model: Cliente, required: true, attributes: ["nome"] },
+				{ model: Endereco, required: true },
+				{ model: Cliente, required: true, attributes: ["id", "nome"] },
 			],
 		})
 			.then((imoveis) => {

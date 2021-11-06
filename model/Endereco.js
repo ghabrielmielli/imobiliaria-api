@@ -10,10 +10,6 @@ const Endereco = db.define(
 			allowNull: false,
 			primaryKey: true,
 		},
-		cep: {
-			type: Sequelize.STRING,
-			allowNull: false,
-		},
 		uf: {
 			type: Sequelize.STRING(2),
 			allowNull: false,
