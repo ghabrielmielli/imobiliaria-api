@@ -15,11 +15,16 @@ router.route("/")
        }); */
 
 		Imovel.findAll({
-			attributes: ["id", "descricao", "endereco", "proprietario"],
-			include: [{ model: Cliente }, { model: Endereco }],
+			attributes: ["id", "descricao"],
+			include: [
+				{ model: Endereco, required: true, attributes: ["cidade"] },
+				{ model: Cliente, required: true, attributes: ["nome"] },
+			],
 		})
 			.then((imoveis) => {
+				console.log("\n\n\n\nAAAA\n\n\n");
 				console.log(imoveis);
+				console.log("\n\n\n\nAAAA\n\n\n");
 				res.send(imoveis);
 			})
 			.catch((e) => {
@@ -33,10 +38,12 @@ router.route("/")
 
 		Endereco.create(endereco)
 			.then((endereco) => {
-				Imovel.create({ ...imovel, endereco: endereco.id })
-					.then((imovel) => {
-						console.log("inseriu:");
-						console.log(imovel);
+				const imovelpronto = { ...imovel, enderecoId: endereco.id };
+				console.log(imovelpronto);
+				Imovel.create(imovelpronto)
+					.then(() => {
+						console.log("inseriu!");
+						res.send();
 					})
 					.catch((e) => {
 						console.log(e);
@@ -47,8 +54,6 @@ router.route("/")
 				console.log(e);
 				res.status(500).send();
 			});
-
-		res.send();
 
 		/* 
 		Imovel.create(req.body)

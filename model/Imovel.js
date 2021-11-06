@@ -16,6 +16,7 @@ const Imovel = db.define(
 			type: Sequelize.STRING,
 			allowNull: false,
 		},
+		/*
 		endereco: {
 			type: Sequelize.INTEGER,
 			references: {
@@ -34,10 +35,31 @@ const Imovel = db.define(
 				key: "id",
 			},
 		},
+		*/
 	},
 	{
 		schema: "public",
 	}
 );
+
+Imovel.belongsTo(Cliente, {
+	foreignKey: {
+		name: "proprietario",
+		allowNull: false,
+	},
+	onDelete: "CASCADE",
+	onUpdate: "CASCADE",
+});
+Cliente.hasOne(Imovel);
+
+Imovel.belongsTo(Endereco, {
+	foreignKey: {
+		name: "enderecoId",
+		allowNull: "false",
+	},
+	onDelete: "CASCADE",
+	onUpdate: "CASCADE",
+});
+Endereco.hasOne(Imovel);
 
 module.exports = Imovel;
