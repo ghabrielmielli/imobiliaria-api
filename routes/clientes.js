@@ -29,8 +29,8 @@ router.route("/")
 				res.send();
 			})
 			.catch((e) => {
-				console.error("ERRO post cliente: \n" + e);
-				res.status(500).send({ error: "A operação falhou!" });
+				console.error("ERRO post cliente: \n");
+				res.status(500).send(e.errors[0].message);
 			});
 	});
 
