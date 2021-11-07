@@ -12,9 +12,11 @@ app.use(express.json());
 //clientes router
 const clientesRoutes = require("./routes/clientes");
 const imoveisRoutes = require("./routes/imoveis");
+const contratosRoutes = require("./routes/contratos");
 
 app.use("/clientes", clientesRoutes);
 app.use("/imoveis", imoveisRoutes);
+app.use("/contratos", contratosRoutes);
 
 //Server start
 app.listen("3000", (err) => {

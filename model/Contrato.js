@@ -12,7 +12,7 @@ const Contrato = db.define(
 			allowNull: false,
 			primaryKey: true,
 		},
-		locatario: {
+		/* locatario: {
 			type: Sequelize.INTEGER,
 			allowNull: false,
 			references: {
@@ -29,7 +29,7 @@ const Contrato = db.define(
 
 				key: "id",
 			},
-		},
+		}, */
 		inicio: {
 			type: Sequelize.DATE,
 			allowNull: false,
@@ -65,7 +65,28 @@ const Contrato = db.define(
 	},
 	{
 		schema: "public",
+		timestamps: false,
 	}
 );
+
+Contrato.belongsTo(Cliente, {
+	foreignKey: {
+		name: "clienteId",
+		allowNull: false,
+	},
+	onDelete: "RESTRICT",
+	onUpdate: "RESTRICT",
+});
+Cliente.hasMany(Contrato);
+
+Contrato.belongsTo(Imovel, {
+	foreignKey: {
+		name: "imovelId",
+		allowNull: "false",
+	},
+	onDelete: "RESTRICT",
+	onUpdate: "RESTRICT",
+});
+Imovel.hasMany(Contrato);
 
 module.exports = Contrato;
