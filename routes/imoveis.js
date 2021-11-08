@@ -22,9 +22,6 @@ router.route("/")
 			],
 		})
 			.then((imoveis) => {
-				console.log("\n\n\n\nAAAA\n\n\n");
-				console.log(imoveis);
-				console.log("\n\n\n\nAAAA\n\n\n");
 				res.send(imoveis);
 			})
 			.catch((e) => {

@@ -55,4 +55,47 @@ router.route("/")
 			});
 	});
 
+router.route("/imovel/:id").get((req, res) => {
+	Contrato.findAll({
+		attributes: ["id", "inicio", "fim", "valorMensal", "incluiIptu", "incluiCondominio", "incluiAgua", "incluiGas", "observacao"],
+		where: {
+			imovelId: req.params.id,
+		},
+		order: [["fim", "DESC"]],
+		include: [
+			{
+				model: Imovel,
+				required: true,
+				attributes: [["id", "imovelId"], "descricao"],
+				include: [
+					{ model: Endereco, required: true },
+					{
+						model: Cliente,
+						required: true,
+						attributes: [
+							["id", "locadorId"],
+							["nome", "nomeLocador"],
+						],
+					},
+				],
+			},
+			{
+				model: Cliente,
+				required: true,
+				attributes: [
+					["id", "locatarioId"],
+					["nome", "locatarioNome"],
+				],
+			},
+		],
+	})
+		.then((contratos) => {
+			res.send(contratos);
+		})
+		.catch((e) => {
+			console.error("Erro ao recuperar contratos:\n" + e);
+			res.status(500).send(e.errors[0].message);
+		});
+});
+
 module.exports = router;
