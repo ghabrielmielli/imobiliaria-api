@@ -44,13 +44,15 @@ router.route("/")
 			});
 	})
 	.post((req, res) => {
-		console.log(req.body);
-		Contrato.create(req.body)
+		let contrato = req.body;
+		console.log(contrato);
+		Contrato.create(contrato)
 			.then(() => {
 				res.send();
 			})
 			.catch((e) => {
 				console.error("ERRO post contrato: \n");
+				console.error(e);
 				res.status(500).send(e.errors[0].message);
 			});
 	});

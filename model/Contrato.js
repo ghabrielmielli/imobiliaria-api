@@ -31,11 +31,11 @@ const Contrato = db.define(
 			},
 		}, */
 		inicio: {
-			type: Sequelize.DATE,
+			type: Sequelize.DATEONLY,
 			allowNull: false,
 		},
 		fim: {
-			type: Sequelize.DATE,
+			type: Sequelize.DATEONLY,
 			allowNull: false,
 		},
 		valorMensal: {
