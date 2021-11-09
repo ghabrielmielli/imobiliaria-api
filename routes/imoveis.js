@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const Sequelize = require("sequelize");
 
 const Imovel = require("../model/Imovel");
 const Endereco = require("../model/Endereco");
@@ -62,6 +63,31 @@ router.route("/")
 				res.status(500).send({ error: "A operação falhou!" });
 		 	});
 			  */
+	});
+
+router.route("/isLocador/:id")
+	//Retorna todos os imoveis
+	.get((req, res) => {
+		/*	let sql = "SELECT * FROM todo";
+
+       db.query(sql, (err, results) => {
+           if (err) throw err;
+           res.send(results);
+       }); */
+
+		Imovel.findOne({
+			attributes: [[Sequelize.fn("COUNT", Sequelize.col("id")), "n_imoveis"]],
+			where: {
+				proprietario: req.params.id,
+			},
+		})
+			.then((numero) => {
+				console.log(numero);
+				res.send(numero);
+			})
+			.catch((e) => {
+				console.error("Erro ao recuperar numero:\n" + e);
+			});
 	});
 
 module.exports = router;

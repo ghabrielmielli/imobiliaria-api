@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const Sequelize = require("sequelize");
 
 const Cliente = require("../model/Cliente");
 const Contrato = require("../model/Contrato");
@@ -96,6 +97,22 @@ router.route("/imovel/:id").get((req, res) => {
 		})
 		.catch((e) => {
 			console.error("Erro ao recuperar contratos:\n" + e);
+			res.status(500).send(e.errors[0].message);
+		});
+});
+
+router.route("/isLocatario/:id").get((req, res) => {
+	Contrato.findOne({
+		attributes: [[Sequelize.fn("COUNT", Sequelize.col("id")), "n_contratos"]],
+		where: {
+			clienteId: req.params.id,
+		},
+	})
+		.then((numero) => {
+			res.send(numero);
+		})
+		.catch((e) => {
+			console.error("Erro ao recuperar numero:\n" + e);
 			res.status(500).send(e.errors[0].message);
 		});
 });
