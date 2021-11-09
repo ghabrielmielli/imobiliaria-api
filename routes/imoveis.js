@@ -90,4 +90,42 @@ router.route("/isLocador/:id")
 			});
 	});
 
+router.route("/:id")
+	.get((req, res) => {
+		Imovel.findOne({
+			attributes: ["id", "descricao"],
+			where: {
+				id: req.params.id,
+			},
+			include: [
+				{ model: Endereco, required: true },
+				{ model: Cliente, required: true, attributes: ["id", "nome"] },
+			],
+		})
+			.then((imovel) => {
+				res.send(imovel);
+			})
+			.catch((e) => {
+				console.error("Erro ao recuperar imovel:\n" + e);
+			});
+	})
+	.put(async (req, res) => {
+		const { endereco, cliente, ...imovel } = req.body;
+
+		await Endereco.update(endereco, {
+			where: {
+				id: endereco.id,
+			},
+		});
+
+		const imovelPronto = { ...imovel, proprietario: cliente.id, enderecoId: endereco.id };
+		console.log(imovelPronto);
+		await Imovel.update(imovelPronto, {
+			where: {
+				id: imovelPronto.id,
+			},
+		});
+		res.send();
+	});
+
 module.exports = router;
