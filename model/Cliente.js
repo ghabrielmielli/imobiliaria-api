@@ -18,10 +18,6 @@ const Cliente = db.define(
 			allowNull: false,
 			unique: true,
 		},
-		tipo: {
-			type: Sequelize.STRING,
-			allowNull: true,
-		},
 	},
 	{
 		schema: "public",

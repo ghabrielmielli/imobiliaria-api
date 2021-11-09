@@ -5,7 +5,7 @@ const Cliente = require("../model/Cliente");
 router.route("/")
 	.get((req, res) => {
 		Cliente.findAll({
-			attributes: ["id", "nome", "cpf", "tipo"],
+			attributes: ["id", "nome", "cpf"],
 		})
 			.then((clientes) => {
 				console.log("fetch");
@@ -25,5 +25,4 @@ router.route("/")
 				res.status(500).send(e.errors[0].message);
 			});
 	});
-
 module.exports = router;

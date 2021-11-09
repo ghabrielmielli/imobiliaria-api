@@ -7,6 +7,7 @@ module.exports = () => {
 	const LogImovel = require("./LogImovel");
 
 	db.sync().then(async () => {
+		//LOG
 		await db.query(`
         create or replace function public.logAlteracaoImovel() returns trigger as $$
         declare
