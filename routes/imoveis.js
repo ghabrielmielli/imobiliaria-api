@@ -126,6 +126,25 @@ router.route("/:id")
 			},
 		});
 		res.send();
+	})
+	.delete(async (req, res) => {
+		try {
+			const imovel = await Imovel.findOne({
+				where: {
+					id: req.params.id,
+				},
+			});
+			await Endereco.destroy({
+				where: {
+					id: imovel.enderecoId,
+				},
+			});
+			res.send();
+		} catch (error) {
+			console.log("ERRO AO DELETAR IMOVEL:");
+			console.log(error);
+			res.status(500).send(e.errors[0].message);
+		}
 	});
 
 module.exports = router;

@@ -84,8 +84,8 @@ Contrato.belongsTo(Imovel, {
 		name: "imovelId",
 		allowNull: "false",
 	},
-	onDelete: "RESTRICT",
-	onUpdate: "RESTRICT",
+	onDelete: "CASCADE",
+	onUpdate: "CASCADE",
 });
 Imovel.hasMany(Contrato);
 
