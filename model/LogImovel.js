@@ -11,7 +11,7 @@ const LogImovel = db.define(
 			primaryKey: true,
 		},
 		data: {
-			type: Sequelize.DATE,
+			type: Sequelize.DATEONLY,
 			allowNull: false,
 		},
 		operacao: {
@@ -35,3 +35,5 @@ const LogImovel = db.define(
 		timestamps: false,
 	}
 );
+
+module.exports = LogImovel;

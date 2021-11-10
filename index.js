@@ -13,10 +13,12 @@ app.use(express.json());
 const clientesRoutes = require("./routes/clientes");
 const imoveisRoutes = require("./routes/imoveis");
 const contratosRoutes = require("./routes/contratos");
+const logsRoutes = require("./routes/logs");
 
 app.use("/clientes", clientesRoutes);
 app.use("/imoveis", imoveisRoutes);
 app.use("/contratos", contratosRoutes);
+app.use("/logs", logsRoutes);
 
 //Server start
 app.listen("3000", (err) => {
