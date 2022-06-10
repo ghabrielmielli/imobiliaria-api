@@ -4,7 +4,7 @@ services:
   postgres:
     image: postgres
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "9000:9000"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -17,7 +17,9 @@ services:
   front:
     image: localhost:5000/front:latest
     ports:
-      - "3000:3000"
+      - "8080:8080"
+    depends_on:
+      - back
     deploy:
       mode: replicated
       replicas: 3
@@ -26,9 +28,14 @@ services:
   back:
     image: localhost:5000/back:latest
     ports:
-      - "8080:8080"
+      - "3000:3000"
+    depends_on:
+      - postgres
     deploy:
       mode: replicated
       replicas: 3
       restart_policy:
         condition: on-failure
+
+volumes:
+  postgres_data:
