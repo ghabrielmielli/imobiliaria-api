@@ -122,6 +122,11 @@ Faça o deploy da stack
 ```bash
 docker@manager1$ docker stack deploy --compose-file imobiliaria-api/docker-stack.yml trabalho
 ```
+Abra a aplicação
+```bash
+<ip_de_um_dos_nodes>:8080
+```
+Instruções de como utilizar a aplicação: https://github.com/ghabrielmielli/imobiliaria-cliente#como-utilizar-a-aplica%C3%A7%C3%A3o
 
 OBS1.: Altere a URL com o IP de um dos nodes (VMs) em `imobiliaria-cliente/src/utils/axiosRouter.js`
 
