@@ -1,36 +1,59 @@
 version: "3.8"
 
+secrets:
+  db_username:
+    external: true
+  db_password:
+    external: true
+  db_name:
+    external: true
+
 services:
   postgres:
     image: postgres
+    hostname: postgres
     ports:
-      - "9000:9000"
+      - "9000:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    secrets:
+      - db_username
+      - db_password
+      - db_name
     environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER_FILE: /run/secrets/db_username
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+      POSTGRES_DB_FILE: /run/secrets/db_name
     deploy:
       placement:
         constraints: [node.role == manager]
+
+  back:
+      image: localhost:5000/back:latest
+      hostname: back
+      ports:
+        - "3000:3000"
+      secrets:
+        - db_username
+        - db_password
+        - db_name
+      environment:
+        WAIT_HOSTS: postgres:5432
+        DB_NAME: trabalho
+        DB_USERNAME: postgres
+        DB_PASSWORD: senha_exposta
+        DB_HOST: trabalho_postgres
+      deploy:
+        mode: replicated
+        replicas: 3
+        restart_policy:
+          condition: on-failure
+
   front:
     image: localhost:5000/front:latest
+    hostname: front
     ports:
       - "8080:8080"
-    depends_on:
-      - back
-    deploy:
-      mode: replicated
-      replicas: 3
-      restart_policy:
-        condition: on-failure
-  back:
-    image: localhost:5000/back:latest
-    ports:
-      - "3000:3000"
-    depends_on:
-      - postgres
     deploy:
       mode: replicated
       replicas: 3
