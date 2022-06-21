@@ -24,7 +24,110 @@ do protótipo é fornecer um sistema que permita cadastro, leitura, alteração 
 - pg-hstore | Dependência para o Sequelize com Postgres
 - sequelize | ORM utilizada no projeto
 
-## Rodando o projeto
+## Rodando o projeto no Docker Swarm
+
+### Pré-requisitos
+- [docker](https://docs.docker.com/engine/install/)
+- [docker-machine](https://github.com/docker/machine)
+- [git](https://git-scm.com/downloads)
+
+### Configurando o projeto
+OBS.: Observe o prompt para saber em qual terminal é necessário rodar os comandos
+- `$`: qualquer terminal
+- `docker@manager1$`: terminal do manager1
+
+Crie três VMs (manager1, worker1 e worker2) através do `docker-machine`
+```bash
+$ docker-machine create --driver virtualbox <nome_da_vm>
+```
+```bash
+$ docker-machine create --driver virtualbox <nome_da_vm>
+```
+```bash
+$ docker-machine create --driver virtualbox <nome_da_vm>
+```
+Para ver os IPs das VMs utilize o seguinte comando
+```bash
+$ docker-machine ls
+```
+Entre no `manager1` via SSH
+```bash
+$ docker-machine ssh <nome_da_vm>
+```
+Abra mais dois terminais e rode o comando acima para `worker1` e `worker2`
+```bash
+$ docker-machine ssh <nome_da_vm>
+```
+```bash
+$ docker-machine ssh <nome_da_vm>
+```
+Inicialize o swarm
+```bash
+docker@manager1$ docker swarm init --advertise-addr <ip_do_manager>
+```
+Copie o comando `docker swarm join...`
+```bash
+...
+docker swarm join \
+    --token <token_gerado> \
+    <ip_do_manager>:2377
+...
+```
+Cole o comando acima nos outros dois terminais
+```bash
+docker@worker1$ docker swarm join...
+```
+```bash
+docker@worker2$ docker swarm join...
+```
+Para ver os nodes do swarm
+```bash
+docker@manager1$ docker node ls
+```
+Inicialize um serviço de registro
+```bash
+docker@manager1$ docker service create --name localhost --publish 5000:5000 registry:2
+```
+Verifique o status do serviço de registro
+```bash
+docker@manager1$ docker service ls
+```
+Crie uma pasta e entre nela
+```bash
+docker@manager1$ mkdir app
+docker@manager1$ cd app
+```
+Clone os dois repositórios
+```bash
+docker@manager1$ git clone https://github.com/ghabrielmielli/imobiliaria-api
+docker@manager1$ git clone https://github.com/ghabrielmielli/imobiliaria-cliente
+```
+Realize o build das imagens
+```bash
+docker@manager1$ docker build imobiliaria-api/ -t localhost:5000/back:latest
+docker@manager1$ docker build imobiliaria-cliente/ -t localhost:5000/front:latest
+```
+Realize o push das imagens
+```bash
+docker@manager1$ docker push localhost:5000/back:latest
+docker@manager1$ docker push localhost:5000/front:latest
+```
+Crie os secrets
+```bash
+docker@manager1$ echo postgres | docker secret create db_username -
+docker@manager1$ echo senha_exposta | docker secret create db_password -
+docker@manager1$ echo trabalho | docker secret create db_name -
+```
+Faça o deploy da stack
+```bash
+docker@manager1$ docker stack deploy --compose-file imobiliaria-api/docker-stack.yml trabalho
+```
+
+OBS1.: Altere a URL com o IP de um dos nodes (VMs) em `imobiliaria-cliente/src/utils/axiosRouter.js`
+
+OBS2.: Caso o valor de algum dos secrets seja alterado é necessário alterar as variáveis de ambiente `DB_NAME`, `DB_USERNAME` e `DB_PASSWORD` em `imobiliaria-api/docker-stack.yml`
+
+## Rodando o projeto localmente
 
 Após clonar o repositório, instale os pacotes necessários para rodar a aplicação executando o seguinte comando na pasta raiz do projeto:
 ```bash
